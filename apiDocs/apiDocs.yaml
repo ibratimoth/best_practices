@@ -1,0 +1,236 @@
+openapi: 3.0.0
+info:
+  title: Node Js with PostgreSQL test project
+  description: API for managing users in the MEN system.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+paths:
+  /getAll:
+    get:
+      summary: Retrieve all users from the database
+      description: Fetch all users from the database, including their id, name, email, designation, and timestamps.
+      responses:
+        '200':
+          description: Successfully retrieved the list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: The unique ID of the user.
+                      example: 33
+                    name:
+                      type: string
+                      description: The name of the user.
+                      example: Samwel
+                    email:
+                      type: string
+                      description: The email of the user.
+                      example: samwel@gmail.com
+                    designation:
+                      type: string
+                      description: The user's job designation.
+                      example: s.j.Fumbi
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: The date and time when the user was created.
+                      example: 2024-10-09T16:47:48.704Z
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      description: The date and time when the user was last updated.
+                      example: 2024-10-09T16:47:48.704Z
+        '404':
+          description: No users found in the database.
+        '500':
+          description: Internal server error.
+
+  /addUser:
+    post:
+      summary: Create a new user
+      description: This API endpoint is used to add a new user to the database. It requires a name, email, and designation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the user.
+                  example: Samwel
+                email:
+                  type: string
+                  description: The email address of the user.
+                  example: samwe@gmail.com
+                designation:
+                  type: string
+                  description: The job designation of the user.
+                  example: s.j.Fumbi
+      responses:
+        '201':
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "User created"
+                  newUser:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 34
+                      name:
+                        type: string
+                        example: Samwel
+                      email:
+                        type: string
+                        example: samwe@gmail.com
+                      designation:
+                        type: string
+                        example: s.j.Fumbi
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2024-10-09T16:47:58.326Z"
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: "2024-10-09T16:47:58.326Z"
+        '400':
+          description: Bad Request - All fields are required
+        '500':
+          description: Internal Server Error
+
+  /single/{id}:
+    get:
+      summary: Get a user by ID
+      description: Retrieve a user from the database by their ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 35
+          description: The ID of the user to retrieve.
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 35
+                      name:
+                        type: string
+                        example: ibrahimu
+                      email:
+                        type: string
+                        example: ibratimoth@gmail.com
+                      designation:
+                        type: string
+                        example: s.j.Fumbi
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2024-10-09T17:29:13.395Z"
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: "2024-10-09T17:29:13.395Z"
+        '404':
+          description: User not found
+        '500':
+          description: Internal Server Error
+
+  /update/{id}:
+    put:
+      summary: Update a user by ID
+      description: Update the details of an existing user by their ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 36
+          description: The ID of the user to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Husse
+                email:
+                  type: string
+                  example: hussein@gmail.com
+                designation:
+                  type: string
+                  example: s.j.Fumbi
+      responses:
+        '201':
+          description: User updated successfully
+        '400':
+          description: User not updated
+        '500':
+          description: Internal Server Error
+
+  /delete/{id}:
+    delete:
+      summary: Delete a user by ID
+      description: Delete a user from the database by their ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 36
+          description: The ID of the user to delete.
+      responses:
+        '200':
+          description: User deleted successfully
+        '400':
+          description: User not found or invalid ID
+        '500':
+          description: Internal Server Error
+
+  /deleteAll:
+    delete:
+      summary: Delete all users from the database
+      description: This API deletes all users from the database.
+      responses:
+        '200':
+          description: All users deleted successfully
+        '400':
+          description: No users found to delete
+        '500':
+          description: Internal Server Error
